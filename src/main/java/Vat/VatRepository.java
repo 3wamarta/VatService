@@ -9,7 +9,7 @@ import java.util.Set;
 public class VatRepository {
 
     public VatRepository() {
-        this.vatValues = new HashSet<Vat>();
+        this.vatValues = new HashSet<>();
         this.vatValues.add(new Vat("Poland", Type.BABY, new BigDecimal("0.05")));
         this.vatValues.add(new Vat("Poland", Type.BOOK, new BigDecimal("0.05")));
         this.vatValues.add(new Vat("Poland", Type.FOOD, new BigDecimal("0.08")));
@@ -21,7 +21,7 @@ public class VatRepository {
     Set<Vat> vatValues;
 
     public Vat getVatFor(String country, Type productType) throws VatNotFoundException {
-        return vatValues.stream().filter(val -> val.country.equals(country) && val.productType.equals(productType))
+        return vatValues.stream().filter(val -> val.getCountry().equals(country) && val.getProductType().equals(productType))
                 .findFirst()
                 .orElseThrow(() ->
                         {
@@ -33,5 +33,9 @@ public class VatRepository {
 
     public void addVatValue(String country, Type productType, BigDecimal amount) {
         vatValues.add(new Vat(country, productType, amount));
+    }
+
+    public boolean hasVatRateFor(String country, Type productType) {
+        return vatValues.stream().anyMatch(vat -> country.equals(vat.getCountry()) && productType == vat.getProductType());
     }
 }
