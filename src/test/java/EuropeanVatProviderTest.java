@@ -9,14 +9,11 @@ import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 import static Product.Type.*;
+import static Vat.EuropeanCountries.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class EuropeanVatProviderTest {
-
-    private static final String POLAND = "Poland";
-    private static final String DENMARK = "Denmark";
-    private static final String GERMANY = "Germany";
 
     private EuropeanVatProvider vatProvider;
 
