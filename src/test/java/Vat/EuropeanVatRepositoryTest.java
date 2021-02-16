@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 import static Product.Type.*;
 import static Vat.EuropeanCountries.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class EuropeanVatRepositoryTest {
 
@@ -28,15 +28,9 @@ class EuropeanVatRepositoryTest {
 
     @Test
     void shouldThrowExceptionWhenCountryIsIncorrect() {
-        Exception exception = assertThrows(VatNotFoundException.class,
-                () -> repositoryToTest.getVatFor(UNEXISTING_COUNTRY, BOOK));
-
-        assertThat(exception.getMessage()).isEqualTo("Vat for country Poland111 and product type BOOK was not found");
-    }
-
-    @Test
-    void shouldReturnFalseIfVatNotInRepository() {
-        assertThat(repositoryToTest.hasVatValueFor(UNEXISTING_COUNTRY, BOOK)).isFalse();
+        assertThatThrownBy(() -> repositoryToTest.getVatFor(UNEXISTING_COUNTRY, BOOK))
+                .isInstanceOf(VatNotFoundException.class)
+                .hasMessage("Vat for country Poland111 and product type BOOK was not found");
     }
 
     @Test
@@ -53,13 +47,13 @@ class EuropeanVatRepositoryTest {
 
     @ParameterizedTest(name = "should return {2} for country {0} and type {1} ")
     @MethodSource
-    void shouldReturnProperPercentageForCountryAndType(String country, Type type, String expectedPercentage) {
+    void shouldReturnVatValueForValidCountryAndType(String country, Type type, String expectedPercentage) {
         Vat result = repositoryToTest.getVatFor(country, type);
         assertThat(result).isEqualToComparingFieldByField(
                 new Vat(country, type, new BigDecimal(expectedPercentage)));
     }
 
-    private static Stream<Arguments> shouldReturnProperPercentageForCountryAndType() {
+    private static Stream<Arguments> shouldReturnVatValueForValidCountryAndType() {
         return Stream.of(
                 Arguments.of(POLAND, BOOK, "0.05"),
                 Arguments.of(POLAND, BABY, "0.05"),
@@ -81,5 +75,4 @@ class EuropeanVatRepositoryTest {
                 Arguments.of(GERMANY, SHOES, "0.21")
         );
     }
-
 }

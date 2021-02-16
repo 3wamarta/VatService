@@ -26,4 +26,8 @@ public class Vat {
     public Type getProductType() {
         return productType;
     }
+
+    public boolean hasCountryAndProductType(String country, Type productType) {
+        return this.country.equals(country) && this.productType == productType;
+    }
 }

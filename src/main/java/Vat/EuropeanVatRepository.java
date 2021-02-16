@@ -10,7 +10,7 @@ import static Vat.EuropeanCountries.*;
 
 public class EuropeanVatRepository implements VatRepository {
 
-    Set<Vat> vatValues;
+    private Set<Vat> vatValues;
 
     public EuropeanVatRepository() {
         this.vatValues = new HashSet<>();
@@ -35,22 +35,26 @@ public class EuropeanVatRepository implements VatRepository {
 
     }
 
+    @Override
     public Vat getVatFor(String country, Type productType) throws VatNotFoundException {
-        return vatValues.stream().filter(val -> val.getCountry().equals(country) && val.getProductType().equals(productType))
+        return vatValues.stream()
+                .filter(vat -> vat.hasCountryAndProductType(country, productType) )
                 .findFirst()
-                .orElseThrow(() ->
-                        {
+                .orElseThrow(() -> {
                             String message = String.format("Vat for country %s and product type %s was not found", country, productType);
                             return new VatNotFoundException(message);
                         }
                 );
     }
 
+    @Override
     public void addVatValue(String country, Type productType, BigDecimal amount) {
         vatValues.add(new Vat(country, productType, amount));
     }
 
+    @Override
     public boolean hasVatValueFor(String country, Type productType) {
-        return vatValues.stream().anyMatch(vat -> country.equals(vat.getCountry()) && productType == vat.getProductType());
+        return vatValues.stream()
+                .anyMatch(vat -> vat.hasCountryAndProductType(country, productType));
     }
 }
