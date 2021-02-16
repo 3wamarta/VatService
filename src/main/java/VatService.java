@@ -12,14 +12,14 @@ public class VatService {
         this.vatProvider = vatProvider;
     }
 
-    BigDecimal getGrossPrice(Product product) {
-        BigDecimal vatValue = vatProvider.getVatFor(product.getCountry(), product.getType());
+    BigDecimal getGrossPrice(Product product, String country) {
+        BigDecimal vatValue = vatProvider.getVatFor(country, product.getType());
         return calculateGrossPrice(product.getNetPrice(), vatValue);
     }
 
-    Stream<BigDecimal> getGrossPrices(Stream<Product> product) {
+    Stream<BigDecimal> getGrossPrices(Stream<Product> product, String country) {
         return product.map(p -> {
-            BigDecimal vatValue = vatProvider.getVatFor(p.getCountry(), p.getType());
+            BigDecimal vatValue = vatProvider.getVatFor(country, p.getType());
             return calculateGrossPrice(p.getNetPrice(), vatValue);
         });
     }

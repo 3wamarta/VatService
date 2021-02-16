@@ -4,18 +4,14 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public class Product {
-    UUID id;
-    String name;
-    BigDecimal netPrice;
-    Type type;
-    String country;
+    private UUID id;
+    private BigDecimal netPrice;
+    private Type type;
 
-    public Product(UUID id, String name, BigDecimal netPrice, Type type, String country) {
+    public Product(UUID id, BigDecimal netPrice, Type type) {
         this.id = id;
-        this.name = name;
         this.netPrice = netPrice;
         this.type = type;
-        this.country = country;
     }
 
     public BigDecimal getNetPrice() {
@@ -26,8 +22,4 @@ public class Product {
         return type;
     }
 
-    public String getCountry() {
-        return country;
-    }
 }
-

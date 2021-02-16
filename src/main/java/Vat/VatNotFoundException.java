@@ -1,6 +1,6 @@
 package Vat;
 
-public class VatNotFoundException extends Exception {
+public class VatNotFoundException extends RuntimeException {
     @Override
     public String getMessage() {
         return message;
